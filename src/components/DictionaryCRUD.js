@@ -21,8 +21,8 @@ const DictionaryCRUD = props => {
   return(
     <li className={classes.container}>
       <h3 className={classes.item1}>{props.dictionaryName}</h3>
-      <Button className={classes.item2} variant="contained" color="primary" onClick={()=>props.editDictionary()}>
-          Edit
+      <Button className={classes.item2} variant="contained" color="primary" onClick={()=>props.showDictionary()}>
+          Display
       </Button>
       <Button className={classes.item2} variant="contained" color="primary">
           Normalize
@@ -37,7 +37,7 @@ const DictionaryCRUD = props => {
 DictionaryCRUD.propTypes = {
   classes: PropTypes.object.isRequired,
   removeDictionary: PropTypes.func.isRequired,
-  editDictionary: PropTypes.func.isRequired
+  showDictionary: PropTypes.func.isRequired
 };
 
 

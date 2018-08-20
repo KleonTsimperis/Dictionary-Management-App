@@ -11,7 +11,7 @@ const ListOfDictionaries = props =>
         dictionaryName={item.dictionaryName}
         id={item.id}
         removeDictionary={()=>props.removeDictionary(item.id)}
-        editDictionary={()=>props.editDictionary(item.id)}
+        showDictionary={()=>props.showDictionary(item.id)}
       />
     )}
   </ul>;
@@ -19,7 +19,6 @@ const ListOfDictionaries = props =>
 ListOfDictionaries.propTypes = {
   dictionaries: PropTypes.array.isRequired,
   removeDictionary: PropTypes.func.isRequired,
-  editDictionary: PropTypes.func.isRequired
 };
 
 export default ListOfDictionaries;

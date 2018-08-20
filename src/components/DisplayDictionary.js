@@ -5,21 +5,22 @@ import './Components.css';
 
 const DisplayDictionary = props =>
   <div>
-    {props.dictionaries.filter(item=>item.isEditing===true).map(item=>
+    {props.dictionaries.filter(item=>item.isEditing===true).map((item,index)=>
       <DictionaryPairValues
-        key={item.id}
+        key={index}
         id={item.id}
         dictionaryName={item.dictionaryName}
         values={item.values}
-        handleInputEditing={text=>props.handleInputEditing(text,item.id)}
+        inpute={props.inpute}
         dictionarySubmitHandler={props.dictionarySubmitHandler}
+        editValues={props.editValues}
+
       />
     )}
   </div>;
 
 DisplayDictionary.propTypes = {
   dictionaries: PropTypes.array.isRequired,
-  handleInputEditing: PropTypes.func.isRequired,
   dictionarySubmitHandler: PropTypes.func.isRequired
 };
 

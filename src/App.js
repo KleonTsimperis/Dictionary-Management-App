@@ -18,7 +18,7 @@ class App extends Component {
       dictionaries:[],
       openForm:false,
       dictionaryName:"",
-      dicitonaryNameError:"",
+      dictionaryNameError:"",
       domainTerm:"",
       domainTermError:"",
       rangeTerm:"",
@@ -40,13 +40,26 @@ class App extends Component {
          .then(response => this.setState({list:response.data}));
 
   addDictionary = () =>
-    this.setState({openForm:true, dictionaryName:""});
+    this.setState({openForm:true, dictionaryName:"", multiplePairValues:true});
 
   closeDictionary = () =>
     this.setState({openForm:false});
 
   handleInput = e =>
     this.setState({[e.target.name]: e.target.value });
+
+  inpute = (id,e) => {
+    const index = this.state.dictionaries.findIndex(item=>item.id === id);
+    var dictionary = this.state.dictionaries[index];
+
+    console.log(index);
+
+    this.setState({domainTerm:e.target.value});
+
+
+
+  };
+
 
   handleMultiplePairValues = () =>
     this.setState({multiplePairValues:!this.state.multiplePairValues});
@@ -103,6 +116,7 @@ class App extends Component {
          {
            domainTerm: this.state.domainTerm,
            rangeTerm: this.state.rangeTerm,
+           isEditingValues: false
          }
        ]
       },
@@ -117,7 +131,8 @@ class App extends Component {
     var updatedDictionary = this.state.dictionaries[index];
     updatedDictionary.values.push({
       domainTerm:this.state.domainTerm,
-      rangeTerm:this.state.rangeTerm
+      rangeTerm:this.state.rangeTerm,
+      isEditingValues: false
     });
     this.setState({
       dictionaries:[
@@ -131,7 +146,21 @@ class App extends Component {
     })
   }
 
-  editDictionary = id =>
+  editValues = (id,row) => {
+    const index = this.state.dictionaries.findIndex(item=>item.id === id);
+    var dictionaryToEdit = this.state.dictionaries[index];
+    dictionaryToEdit.values[row].isEditingValues = true;
+
+    this.setState({
+      dictionaries:[
+        ...this.state.dictionaries.slice(0,index),
+        dictionaryToEdit,
+        ...this.state.dictionaries.slice(index+1)
+      ]
+    })
+  };
+
+  showDictionary = id =>
     this.setState({dictionaries:this.state.dictionaries.map(item=>{
       if(item.id!==id){
         return {
@@ -169,32 +198,41 @@ class App extends Component {
   handleOpenSnackBar = () =>
     this.setState({snackBarOpen: true});
 
-  handleInputEditing = () =>
-    this.setState({editing:"edit"});
 
   render() {
     return (
         <div>
           <NavBar addDictionary={this.addDictionary}/>
           <Grid container>
+
             <Grid item xs={12} md={4} >
               <Table list={this.state.list}/>
             </Grid>
+
             <Grid item xs={12} md={4}>
               <DisplayDictionary
                 dictionaries={this.state.dictionaries}
-                handleInputEditing={this.handleInputEditing}
+                handleInput={this.handleInput}
                 dictionarySubmitHandler={this.dictionarySubmitHandler}
+                editValues={this.editValues}
+                inpute={this.inpute}
+
               />
             </Grid>
+
             <Grid item xs={12} md={4}>
               <ListOfDictionaries
                 dictionaries={this.state.dictionaries}
                 removeDictionary={this.removeDictionary}
-                editDictionary={this.editDictionary}
+                showDictionary={this.showDictionary}
               />
             </Grid>
+
           </Grid>
+
+
+
+
           <AddDictionary
             openForm={this.state.openForm}
             closeDictionary={this.closeDictionary}

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import ValuePairs from './ValuePairs';
 
 
 const DictionaryPairValues = props =>
@@ -14,12 +15,16 @@ const DictionaryPairValues = props =>
       </thead>
       <tbody>
       {props.values.map((item,index)=>
-          <tr key={props.id}>
-            <td>{item.domainTerm}</td>
-            <td>{item.rangeTerm}</td>
-            <td><button>edit</button></td>
-            <td><button>delete</button></td>
-          </tr>
+        <ValuePairs
+          key={index}
+          id={index}
+          domainTerm={item.domainTerm}
+          rangeTerm={item.rangeTerm}
+          isEditingValues={item.isEditingValues}
+          editValues={()=>props.editValues(props.id,index)}
+          inpute={()=>props.inpute(props.id)}
+        />
+
       )}
       </tbody>
     </table>
