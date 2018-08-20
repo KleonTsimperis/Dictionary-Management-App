@@ -1,0 +1,50 @@
+[
+  {
+    "id":1,
+    "product":"Apple iPhone 6s",
+    "color":"Stonegrey",
+    "price":"CHF 769"
+  },
+  {
+    "id":2,
+    "product":"Samsung Galaxy S8",
+    "color":"Midnight Black",
+    "price":"CHF 569"
+  },
+  {
+    "id":3,
+    "product":"Huawei P9",
+    "color":"Mystic Silver",
+    "price":"CHF 272"
+  },
+  {
+    "id":4,
+    "product":"Xiaomi Redmi 5",
+    "color":"Onyx Black",
+    "price":"CHF 369"
+  },
+  {
+    "id":5,
+    "product":"Lenovo s20",
+    "color":"Arctic Silver",
+    "price":"CHF 399"
+  },
+  {
+    "id":6,
+    "product":"Google Pixel 2",
+    "color":"Gunmetal Grey",
+    "price":"CHF 300"
+  },
+  {
+    "id":7,
+    "product":"Asus Zenfone 5z",
+    "color":"Ocean Blue",
+    "price":"CHF 350"
+  },
+  {
+    "id":8,
+    "product":"LG Q8",
+    "color":"Sky Blue",
+    "price":"CHF 400"
+  }
+]
