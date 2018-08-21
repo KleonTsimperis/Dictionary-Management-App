@@ -10,8 +10,9 @@ const ListOfDictionaries = props =>
         key={item.id}
         dictionaryName={item.dictionaryName}
         id={item.id}
-        removeDictionary={()=>props.removeDictionary(item.id)}
         showDictionary={()=>props.showDictionary(item.id)}
+        normalizeDictionary={()=>props.normalizeDictionary(item.id)}
+        removeDictionary={()=>props.removeDictionary(item.id)}
       />
     )}
   </ul>;

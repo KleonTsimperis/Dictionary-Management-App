@@ -24,7 +24,7 @@ const DictionaryCRUD = props => {
       <Button className={classes.item2} variant="contained" color="primary" onClick={()=>props.showDictionary()}>
           Display
       </Button>
-      <Button className={classes.item2} variant="contained" color="primary">
+      <Button className={classes.item2} variant="contained" color="primary" onClick={()=>props.normalizeDictionary()}>
           Normalize
       </Button>
       <Button className={classes.item2} variant="contained" color="secondary" onClick={()=>props.removeDictionary()}>

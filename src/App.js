@@ -269,6 +269,25 @@ class App extends Component {
       return item;
     })});
 
+  normalizeDictionary = id => {
+    var currentList = this.state.list;
+    const index = this.state.dictionaries.findIndex(item=>item.id === id);
+    var dictionaryUseToNormalize = this.state.dictionaries[index];
+    var pairValuesToNormalize = dictionaryUseToNormalize.values.map(item=>({domainTerm:item.domainTerm, rangeTerm:item.rangeTerm}));
+    for (var i=0; i < pairValuesToNormalize.length; i++){
+      for (var y=0; y < currentList.length; y++){
+        if(pairValuesToNormalize[i].domainTerm === currentList[y].color){
+          currentList[y].color = pairValuesToNormalize[i].rangeTerm;
+        };
+      };
+    };
+    console.log(pairValuesToNormalize)
+    this.setState({list:currentList});
+  };
+
+  removeDictionary = id =>
+    this.setState({dictionaries:this.state.dictionaries.filter(item=> id !== item.id)});
+
   handleFormState = () => {
     if (this.state.multiplePairValues){
       return true;
@@ -276,9 +295,6 @@ class App extends Component {
       return false;
     }
   };
-
-  removeDictionary = id =>
-    this.setState({dictionaries:this.state.dictionaries.filter(item=> id !== item.id)});
 
   handleCloseSnackBar = (event, reason) => {
     if (reason === 'clickaway') {
@@ -317,6 +333,7 @@ class App extends Component {
                 dictionaries={this.state.dictionaries}
                 removeDictionary={this.removeDictionary}
                 showDictionary={this.showDictionary}
+                normalizeDictionary={this.normalizeDictionary}
               />
             </Grid>
 
