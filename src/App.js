@@ -126,37 +126,76 @@ class App extends Component {
       openForm:this.handleFormState()
     });
 
-  testValidate = index => {
+  validateDuplicateDomainsRanges = index => {
     var isError1 = false;
     var isError2 = false;
-    var cumError = false;
-    var updatedDictionary = this.state.dictionaries[index];
-    const newArr = updatedDictionary.values.map(item=>({domainCheck:item.domainTerm, rangeCheck:item.rangeTerm}));
-    for (var i=0; i<newArr.length; i++){
-      if(this.state.domainTerm === newArr[i].domainCheck){
+    var cumulativeError = false;
+    var validateDictionary = this.state.dictionaries[index];
+    const validatePairs = validateDictionary.values.map(item=>({domainCheck:item.domainTerm, rangeCheck:item.rangeTerm}));
+    for (var i=0; i < validatePairs.length; i++){
+      if(this.state.domainTerm === validatePairs[i].domainCheck){
         isError1 = true;
-      }
-      if(this.state.rangeTerm === newArr[i].rangeCheck){
+      };
+      if(this.state.rangeTerm === validatePairs[i].rangeCheck){
         isError2 = true;
-      }
+      };
       if(isError1 && isError2){
-        cumError = true;
-      }
-    }
-    return cumError;
-    console.log(newArr);
+        cumulativeError = true;
+        alert('Duplicate');
+      };
+    };
+    return cumulativeError;
+    // Message: "This Domain - Value pair already exist"
+  };
 
-    // if (domTerm.includes(this.state.domainTerm)){
-    //   isError = true;
-    // }
-    // return isError;
+  validateForks = index => {
+    var isError = false;
+    var validateDictionary = this.state.dictionaries[index];
+    var validatePairs = validateDictionary.values.map(item=>({domainCheck:item.domainTerm, rangeCheck:item.rangeTerm}));
+    for (var i=0; i < validatePairs.length; i++){
+      if(this.state.domainTerm === validatePairs[i].domainCheck && this.state.rangeTerm !== validatePairs[i].rangeCheck){
+      isError = true;
+      alert('Fork');
+      };
+    };
+    return isError;
+  };
+
+  validateCycles = index => {
+    var isError = false;
+    var validateDictionary = this.state.dictionaries[index];
+    var validatePairs = validateDictionary.values.map(item=>({domainCheck:item.domainTerm, rangeCheck:item.rangeTerm}));
+    for (var i=0; i < validatePairs.length; i++){
+      if(this.state.domainTerm === validatePairs[i].rangeCheck && this.state.rangeTerm === validatePairs[i].domainCheck){
+        isError = true;
+        alert('cycle validated');
+      };
+    };
+    return isError;
+  };
+
+  validateChains = index => {
+    var isError = false;
+    var validateDictionary = this.state.dictionaries[index];
+    var validatePairs = validateDictionary.values.map(item=>({domainCheck:item.domainTerm, rangeCheck:item.rangeTerm}));
+    for (var i=0; i < validatePairs.length; i++){
+      if(this.state.domainTerm === validatePairs[i].rangeCheck){
+        isError = true;
+        alert('chains validation failed');
+      };
+    };
+    return isError;
   };
 
   editExistingDictionary = index => {
     var updatedDictionary = this.state.dictionaries[index];
-    const test = this.testValidate(index);
+    const error1 = this.validateDuplicateDomainsRanges(index);
+    const error2 = this.validateForks(index);
+    const error3 = this.validateCycles(index);
+    const error4 = this.validateChains(index);
 
-    if (!test){
+
+    if (!error1 && !error2 && !error3 & !error4){
     updatedDictionary.values.push({
       domainTerm:this.state.domainTerm,
       rangeTerm:this.state.rangeTerm,
@@ -172,8 +211,7 @@ class App extends Component {
       rangeTerm:"",
       openForm:this.handleFormState()
     });
-    }
-
+    };
   };
 
   editValues = (id,row) => {
