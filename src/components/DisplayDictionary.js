@@ -5,23 +5,22 @@ import './Components.css';
 
 const DisplayDictionary = props =>
   <div>
-    {props.dictionaries.filter(item=>item.isEditing===true).map((item,index)=>
+    {props.dictionaries.filter(item=>item.isShowing===true).map((item,index)=>
       <DictionaryPairValues
         key={index}
         id={item.id}
         dictionaryName={item.dictionaryName}
         values={item.values}
         inpute={props.inpute}
-        dictionarySubmitHandler={props.dictionarySubmitHandler}
+        removeValuePairs={props.removeValuePairs}
+        addValuesToDictionary={props.addValuesToDictionary}
         editValues={props.editValues}
-
       />
     )}
   </div>;
 
 DisplayDictionary.propTypes = {
   dictionaries: PropTypes.array.isRequired,
-  dictionarySubmitHandler: PropTypes.func.isRequired
 };
 
 export default DisplayDictionary;

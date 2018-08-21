@@ -18,11 +18,15 @@ const DictionaryPairValues = props =>
         <ValuePairs
           key={index}
           id={index}
+          dictionaryName={props.dictionaryName}
           domainTerm={item.domainTerm}
           rangeTerm={item.rangeTerm}
           isEditingValues={item.isEditingValues}
           editValues={()=>props.editValues(props.id,index)}
-          inpute={()=>props.inpute(props.id)}
+          inputeDomain={(e)=>props.inpute(props.id,index,e.target.value,"domain")}
+          inputeRange={(e)=>props.inpute(props.id,index,e.target.value,"range")}
+          removeValuePairs={()=>props.removeValuePairs(props.id,index)}
+          addValuesToDictionary={()=>props.addValuesToDictionary(props.dictionaryName)}
         />
 
       )}

@@ -9,6 +9,7 @@ import DisplayDictionary from './components/DisplayDictionary';
 import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
+import update from 'immutability-helper';
 
 
 class App extends Component {
@@ -25,6 +26,7 @@ class App extends Component {
       rangeTermError:"",
       snackBarOpen:false,
       multiplePairValues:true,
+      isAddingValuesAfterCreation:false
     };
 
   lastDictionaryId = 0;
@@ -40,7 +42,10 @@ class App extends Component {
          .then(response => this.setState({list:response.data}));
 
   addDictionary = () =>
-    this.setState({openForm:true, dictionaryName:"", multiplePairValues:true});
+    this.setState({openForm:true, dictionaryName:"", domainTerm:"", rangeTerm:"", multiplePairValues:true, isAddingValuesAfterCreation:false});
+
+  addValuesToDictionary = dictionaryName =>
+    this.setState({openForm:true, dictionaryName, multiplePairValues:true, isAddingValuesAfterCreation:true});
 
   closeDictionary = () =>
     this.setState({openForm:false});
@@ -48,23 +53,10 @@ class App extends Component {
   handleInput = e =>
     this.setState({[e.target.name]: e.target.value });
 
-  inpute = (id,e) => {
-    const index = this.state.dictionaries.findIndex(item=>item.id === id);
-    var dictionary = this.state.dictionaries[index];
-
-    console.log(index);
-
-    this.setState({domainTerm:e.target.value});
-
-
-
-  };
-
-
   handleMultiplePairValues = () =>
     this.setState({multiplePairValues:!this.state.multiplePairValues});
 
-  validate = () => {
+  validateTextInput = () => {
     var isError = false;
     const errors = {
       dictionaryNameError:"",
@@ -89,11 +81,18 @@ class App extends Component {
     return isError;
   };
 
+  // validateDuplicateDomainsRanges = () => {
+  //   var isError = false;
+  //   var index = this.state.dictionaries.findIndex(item => item.dictionaryName === this.state.dictionaryName);
+  //   console.log(index);
+  // };
+
+
   dictionarySubmitHandler = e => {
     e.preventDefault();
-    const err = this.validate();
+    const err = this.validateTextInput();
     if(!err){
-      var index = this.state.dictionaries.findIndex((obj => obj.dictionaryName === this.state.dictionaryName));
+      var index = this.state.dictionaries.findIndex(item => item.dictionaryName === this.state.dictionaryName);
       // if its new
       if (index === -1){
         this.createNewDictionary();
@@ -102,7 +101,7 @@ class App extends Component {
         this.editExistingDictionary(index);
         this.handleOpenSnackBar();
         }
-      }
+      };
     };
 
   createNewDictionary = () =>
@@ -110,7 +109,7 @@ class App extends Component {
       dictionaries:[
       {
        dictionaryName:this.state.dictionaryName,
-       isEditing:false,
+       isShowing:false,
        id:this.assignDictionaryId(),
        values:[
          {
@@ -127,8 +126,37 @@ class App extends Component {
       openForm:this.handleFormState()
     });
 
+  testValidate = index => {
+    var isError1 = false;
+    var isError2 = false;
+    var cumError = false;
+    var updatedDictionary = this.state.dictionaries[index];
+    const newArr = updatedDictionary.values.map(item=>({domainCheck:item.domainTerm, rangeCheck:item.rangeTerm}));
+    for (var i=0; i<newArr.length; i++){
+      if(this.state.domainTerm === newArr[i].domainCheck){
+        isError1 = true;
+      }
+      if(this.state.rangeTerm === newArr[i].rangeCheck){
+        isError2 = true;
+      }
+      if(isError1 && isError2){
+        cumError = true;
+      }
+    }
+    return cumError;
+    console.log(newArr);
+
+    // if (domTerm.includes(this.state.domainTerm)){
+    //   isError = true;
+    // }
+    // return isError;
+  };
+
   editExistingDictionary = index => {
     var updatedDictionary = this.state.dictionaries[index];
+    const test = this.testValidate(index);
+
+    if (!test){
     updatedDictionary.values.push({
       domainTerm:this.state.domainTerm,
       rangeTerm:this.state.rangeTerm,
@@ -143,21 +171,47 @@ class App extends Component {
       domainTerm:"",
       rangeTerm:"",
       openForm:this.handleFormState()
-    })
-  }
+    });
+    }
+
+  };
 
   editValues = (id,row) => {
     const index = this.state.dictionaries.findIndex(item=>item.id === id);
     var dictionaryToEdit = this.state.dictionaries[index];
-    dictionaryToEdit.values[row].isEditingValues = true;
-
+    dictionaryToEdit.values[row].isEditingValues = !dictionaryToEdit.values[row].isEditingValues;
     this.setState({
       dictionaries:[
         ...this.state.dictionaries.slice(0,index),
         dictionaryToEdit,
         ...this.state.dictionaries.slice(index+1)
       ]
-    })
+    });
+  };
+
+  inpute = (id,row,text,fieldName) => {
+    console.log(id,row,text,fieldName);
+    const index = this.state.dictionaries.findIndex(item=>item.id === id);
+    var dictionaryToEdit = this.state.dictionaries[index];
+    if(fieldName==="domain"){
+      dictionaryToEdit.values[row].domainTerm = text;
+    } else if (fieldName==="range") {
+      dictionaryToEdit.values[row].rangeTerm = text;
+    };
+    const updatedDictionaries = update(this.state.dictionaries,{$splice: [[index, 1, dictionaryToEdit]]});
+    this.setState({dictionaries:updatedDictionaries});
+    // Without helpers
+    // this.setState({dictionaries:[...this.state.dictionaries.slice(0,index), dictionaryToEdit,...this.state.dictionaries.slice(index+1)]});
+  };
+
+  removeValuePairs = (id,row) => {
+    const index = this.state.dictionaries.findIndex(item=>item.id === id);
+    var dictionaryToRemoveValues = this.state.dictionaries[index];
+    dictionaryToRemoveValues.values.splice(row,1);
+    const updatedDictionaries = update(this.state.dictionaries,{$splice: [[index, 1, dictionaryToRemoveValues]]});
+    this.setState({dictionaries:updatedDictionaries});
+    // Without helpers
+    // this.setState({dictionaries:[...this.state.dictionaries.slice(0,index), dictionaryToRemoveValues, ...this.state.dictionaries.slice(index+1)]});
   };
 
   showDictionary = id =>
@@ -165,13 +219,13 @@ class App extends Component {
       if(item.id!==id){
         return {
           ...item,
-          isEditing:false
+          isShowing:false
         }
       }
       if(item.id===id){
         return {
           ...item,
-          isEditing:true
+          isShowing:true
         }
       }
       return item;
@@ -213,10 +267,10 @@ class App extends Component {
               <DisplayDictionary
                 dictionaries={this.state.dictionaries}
                 handleInput={this.handleInput}
-                dictionarySubmitHandler={this.dictionarySubmitHandler}
+                addValuesToDictionary={this.addValuesToDictionary}
                 editValues={this.editValues}
                 inpute={this.inpute}
-
+                removeValuePairs={this.removeValuePairs}
               />
             </Grid>
 
@@ -246,6 +300,7 @@ class App extends Component {
             rangeTermError={this.state.rangeTermError}
             multiplePairValues={this.state.multiplePairValues}
             handleMultiplePairValues={this.handleMultiplePairValues}
+            isAddingValuesAfterCreation={this.state.isAddingValuesAfterCreation}
           />
           <Snackbar
           anchorOrigin={{

@@ -20,6 +20,7 @@ const AddDictionary = props =>
         handleInput={props.handleInput}
         multiplePairValues={props.multiplePairValues}
         handleMultiplePairValues={props.handleMultiplePairValues}
+        isAddingValuesAfterCreation={props.isAddingValuesAfterCreation}
       />
     </Modal>
   </div>

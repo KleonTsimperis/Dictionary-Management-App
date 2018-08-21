@@ -7,7 +7,8 @@ const Form = props =>
   <form onSubmit={props.dictionarySubmitHandler} autoComplete="off">
     <fieldset>
       <label><strong>Dictionary Name:</strong></label>
-      <input type="text" id="name" name="dictionaryName" value={props.dictionaryName} onChange={props.handleInput} autoFocus={true}/>
+      {props.isAddingValuesAfterCreation? <h3>{props.dictionaryName}</h3>:
+      <input type="text" id="name" name="dictionaryName" value={props.dictionaryName} onChange={props.handleInput} autoFocus={true}/>}
       <label className="errorLabel" style={{color:"red"}}>{props.dictionaryName === "" ? props.dictionaryNameError : ""}</label>
 
       <label htmlFor="email">Domain Term:</label>
