@@ -1,35 +1,44 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Checkbox from '@material-ui/core/Checkbox';
+import Button from '@material-ui/core/Button';
 import './Components.css';
 
 const Form = props =>
 
   <form onSubmit={props.dictionarySubmitHandler} autoComplete="off">
     <fieldset>
-      <label><strong>Dictionary Name:</strong></label>
-      {props.isAddingValuesAfterCreation? <h3>{props.dictionaryName}</h3>:
+      <label><strong>Dictionary Name</strong></label>
+      {props.isAddingValuesAfterCreation? <h2>{props.dictionaryName}</h2>:
       <input type="text" id="name" name="dictionaryName" value={props.dictionaryName} onChange={props.handleInput} autoFocus={true}/>}
       <label className="errorLabel" style={{color:"red"}}>{props.dictionaryName === "" ? props.dictionaryNameError : ""}</label>
 
-      <label htmlFor="email">Domain Term:</label>
+      <label htmlFor="email">Domain Term</label>
       <input type="text" id="email" name="domainTerm" value={props.domainTerm} onChange={props.handleInput}/>
       <label className="errorLabel" style={{color:"red"}}>{props.domainTerm.length <= 1 ? props.domainTermError : ""}</label>
 
-      <label htmlFor="password">Range Term:</label>
+      <label htmlFor="password">Range Term</label>
       <input type="text" id="password" name="rangeTerm" value={props.rangeTerm} onChange={props.handleInput}/>
       <label className="errorLabel" style={{color:"red"}}>{props.rangeTerm.length <= 2 ? props.rangeTermError : ""}</label>
 
-      <label style={{textAlign:"center"}}>
+      <label>
         Add multiple domain/range pairs
       </label>
-      <input
+      <Checkbox
+          checked={props.multiplePairValues}
+          onChange={props.handleMultiplePairValues}
+          value="checkedF"
+          color="primary"
+          className="balance"
+        />
+      {/*<input
         type="checkbox"
         checked={props.multiplePairValues}
         onChange={props.handleMultiplePairValues}
-      />
-      <button variant="contained" color="primary" type="submit" onSubmit={props.dictionarySubmitHandler} className="submit">
+      />*/}
+      <Button style={{marginTop: "1rem"}} variant="contained" color="primary" type="submit" onSubmit={props.dictionarySubmitHandler} className="submit">
           Submit
-      </button>
+      </Button>
     </fieldset>
   </form>;
 

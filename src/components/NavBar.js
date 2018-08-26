@@ -14,22 +14,24 @@ const styles = {
     display: 'flex'
   },
   title: {
-    marginRight: 'auto'
+    marginRight: 'auto',
+    color: 'white'
+  },
+  button: {
+    margin: '1rem'
   }
 };
-
-
 
 const NavBar = props => {
   const {classes} = props;
   return (
     <div className={classes.root}>
-      <AppBar position="static" color="default">
+      <AppBar position="static" color="default" className="appBar">
         <Toolbar className={classes.container}>
           <Typography variant="title" color="inherit" className={classes.title}>
             Dictionary Management App
           </Typography>
-          <Button variant="contained" color="primary" className={classes.button} onClick={()=>props.addDictionary()}>
+          <Button variant="contained" color="primary" className={classes.button} onClick={props.addDictionary}>
             Add Dictionary
           </Button>
         </Toolbar>

@@ -2,12 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-responsive-modal';
 import Form from './Form';
+import './Components.css';
 
 const AddDictionary = props =>
+
   <div>
     <Modal
-        open={props.openForm}
-        onClose={props.closeDictionary}
+      open={props.openForm}
+      onClose={props.closeDictionary}
+      className='styles_modal__gNwvD'
+      showCloseIcon={false}
       >
       <Form
         dictionarySubmitHandler={props.dictionarySubmitHandler}
