@@ -119,7 +119,6 @@ class App extends Component {
     return isError;
   };
 
-
   dictionarySubmitHandler = e => {
     e.preventDefault();
     const err = this.validateTextInput();
@@ -238,7 +237,6 @@ class App extends Component {
       if(dom === validatePairs[i].domainCheck && ran === validatePairs[i].rangeCheck && row !== i){
         isError = true;
         validateDictionary.values[row].error1 = true;
-        console.log('going through duplicates')
         // duplicate error can never be a fork error. setting error2 as false in order to reset it in case it already exist
         validateDictionary.values[row].error2 = false;
         validateDictionary.values[i].error2 = false;
@@ -256,7 +254,6 @@ class App extends Component {
   };
 
   validateForks = (id, row, dom, ran) => {
-
     var existingError = false;
     var isError = false;
     const index = this.state.dictionaries.findIndex(item=>item.id === id);
@@ -276,7 +273,6 @@ class App extends Component {
         validateDictionary.values[i].error2 = false;
       }
     }
-
     // Setting state only if there is an error
     if((existingError && !isError) || isError){
       const updatedDictionaries = update(this.state.dictionaries,{$splice: [[index, 1, validateDictionary]]});
@@ -318,27 +314,20 @@ class App extends Component {
     const index = this.state.dictionaries.findIndex(item=>item.id === id);
     var validateDictionary = this.state.dictionaries[index];
 
-
     var validatePairs = validateDictionary.values.map(item=>({domainCheck:item.domainTerm, rangeCheck:item.rangeTerm}));
 
     for (let i=0; i < validatePairs.length; i++){
       if((dom === validatePairs[i].rangeCheck && row !== i)||(ran === validatePairs[i].domainCheck && row !== i)){
         isError = true;
-        // console.log(i,row,dom,ran, 'this is a chain')
         validateDictionary.values[row].error4 = true;
       } else if (dom !== validatePairs[i].rangeCheck && row !== i){
         validateDictionary.values[row].error4 = false;
         validateDictionary.values[i].error4 = false;
-        // console.log('no chain - dom');
       } else if (ran !== validatePairs[i].domainCheck && row !== i){
         validateDictionary.values[row].error4 = false;
         validateDictionary.values[i].error4 = false;
-        // console.log('no chain - dom');
       }
     };
-
-
-
     if(isError){
       const updatedDictionaries = update(this.state.dictionaries,{$splice: [[index, 1, validateDictionary]]});
       this.setState({dictionaries:updatedDictionaries});
@@ -392,7 +381,6 @@ class App extends Component {
 
   showDictionary = dictionaryName => {
     const editing = this.preventShowDictionaryWhenEditing();
-    // console.log(editing);
     if (!editing){
       this.setState({dictionaries:this.state.dictionaries.map(item=>{
         if(item.dictionaryName!==dictionaryName){
